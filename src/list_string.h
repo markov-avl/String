@@ -13,9 +13,10 @@ private:
     MulticharacterBlock* tail;  // ссылка на последний многосимвольный блок
 
 public:
-    // конструктор и деструктор
+    // конструктор, деструктор и оператор копирования
     explicit String();
     ~String();
+    String(String& string);
 
     // преобразование
     friend String toString(const char*);
@@ -31,10 +32,22 @@ public:
 
     // перегрузка стандартных операторов
     friend std::ostream &operator<<(std::ostream&, const String&);
+    friend String operator+(const String& a, const String& b);
+    friend String operator+(const String& a, const char* b);
+    friend String operator+(const String& a, const std::string& b);
+    friend void operator+=(String& a, const String& b);
+    friend void operator+=(String& a, const char* b);
+    friend void operator+=(String& a, const std::string& b);
 };
 
 String toString(const char*);
 String toString(const std::string&);
+String operator+(const String& a, const String& b);
+String operator+(const String& a, const char* b);
+String operator+(const String& a, const std::string& b);
+void operator+=(String& a, const String& b);
+void operator+=(String& a, const char* b);
+void operator+=(String& a, const std::string& b);
 
 
 #endif

@@ -31,6 +31,10 @@ String::String() {
     tail = head = nullptr;
 }
 
+String::String(String& string) {
+    // TODO
+}
+
 String::~String() {
     MulticharacterBlock* prev;
     auto current = head;
@@ -74,4 +78,34 @@ std::ostream &operator<<(std::ostream &out, const String &string) {
     }
     out << '\0';
     return out;
+}
+
+String operator+(const String &a, const String &b) {
+    auto string = String(a);
+    string.concatenate(b);
+    return string;
+}
+
+String operator+(const String &a, const char *b) {
+    auto string = String(a);
+    string.concatenate(b);
+    return string;
+}
+
+String operator+(const String &a, const std::string &b) {
+    auto string = String(a);
+    string.concatenate(b);
+    return string;
+}
+
+void operator+=(String &a, const String &b) {
+    a.concatenate(b);
+}
+
+void operator+=(String &a, const char *b) {
+    a.concatenate(b);
+}
+
+void operator+=(String &a, const std::string &b) {
+    a.concatenate(b);
 }
