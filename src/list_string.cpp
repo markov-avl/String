@@ -20,8 +20,8 @@ String toString(const char* text) {
     return string;
 }
 
-String toString(const std::string* text) {
-    return toString(text->c_str());
+String toString(const std::string& text) {
+    return toString(text.c_str());
 }
 
 
@@ -56,7 +56,7 @@ void String::concatenate(const char* text) {
     concatenate(string);
 }
 
-void String::concatenate(const std::string* text) {
+void String::concatenate(const std::string& text) {
     auto string = toString(text);
     concatenate(string);
 }

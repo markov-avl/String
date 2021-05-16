@@ -11,6 +11,7 @@ private:
     unsigned int last_length;   // количество символов в последнем блоке
     MulticharacterBlock* head;  // ссылка на первый многосимвольный блок
     MulticharacterBlock* tail;  // ссылка на последний многосимвольный блок
+
 public:
     // конструктор и деструктор
     explicit String();
@@ -18,7 +19,7 @@ public:
 
     // преобразование
     friend String toString(const char*);
-    friend String toString(const std::string*);
+    friend String toString(const std::string&);
 
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
@@ -26,14 +27,14 @@ public:
     // конкатенация
     void concatenate(const String&);
     void concatenate(const char*);
-    void concatenate(const std::string*);
+    void concatenate(const std::string&);
 
     // перегрузка стандартных операторов
     friend std::ostream &operator<<(std::ostream&, const String&);
 };
 
 String toString(const char*);
-String toString(const std::string*);
+String toString(const std::string&);
 
 
 #endif

@@ -3,7 +3,7 @@
 
 
 int main() {
-    auto text = toString("1234567890123456");
+    auto text = toString("12345678901234567");
     std::cout << "<" << text << ">" << std::endl;
     std::cout << text.length() << std::endl;
     return 0;
