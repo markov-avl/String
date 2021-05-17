@@ -2,12 +2,11 @@
 #define STRING_MULTICHARACTER_BLOCK_H
 
 
-constexpr int CHARACTERS = 16;
-
-
 struct MulticharacterBlock {
-    MulticharacterBlock* next = nullptr;
-    char characters[CHARACTERS] = {};
+    MulticharacterBlock* next;
+    char* characters;
+
+    explicit MulticharacterBlock(unsigned int);
 };
 
 

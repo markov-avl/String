@@ -3,8 +3,9 @@
 
 
 int main() {
-    auto text = toString("12345678901234567");
-    std::cout << "<" << text << ">" << std::endl;
-    std::cout << text.length() << std::endl;
+    auto text1 = toString("fhseofhse_", 4);
+    auto text2 = toString("rhfsieuhfseiuhfsehf", 12);
+    std::cout << "<" << text1 + text2 << ">" << std::endl;
+    std::cout << text1.length() << std::endl;
     return 0;
 }

@@ -7,20 +7,25 @@
 
 class String {
 private:
+    unsigned int size;          // количество символов в блоке
     unsigned int blocks;        // количество многосимвольных блоков
     unsigned int last_length;   // количество символов в последнем блоке
-    MulticharacterBlock* head;  // ссылка на первый многосимвольный блок
-    MulticharacterBlock* tail;  // ссылка на последний многосимвольный блок
+    MulticharacterBlock* head{};  // ссылка на первый многосимвольный блок
+    MulticharacterBlock* tail{};  // ссылка на последний многосимвольный блок
+
+    void deleteList();
 
 public:
+    static const unsigned int DEFAULT_SIZE = 16;
+
     // конструктор, деструктор и оператор копирования
-    explicit String();
+    explicit String(unsigned int = DEFAULT_SIZE);
     ~String();
-    String(String& string);
+    String(const String&);
 
     // преобразование
-    friend String toString(const char*);
-    friend String toString(const std::string&);
+    friend String toString(const char*, unsigned int);
+    friend String toString(const std::string&, unsigned int);
 
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
@@ -40,8 +45,8 @@ public:
     friend void operator+=(String& a, const std::string& b);
 };
 
-String toString(const char*);
-String toString(const std::string&);
+String toString(const char*, unsigned int = String::DEFAULT_SIZE);
+String toString(const std::string&, unsigned int = String::DEFAULT_SIZE);
 String operator+(const String& a, const String& b);
 String operator+(const String& a, const char* b);
 String operator+(const String& a, const std::string& b);
