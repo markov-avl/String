@@ -3,9 +3,10 @@
 
 
 int main() {
-    auto text1 = String("101010", 15);
-    auto text2 = String("0", 12);
-    // std::cout << "<" << text1 << ">" << std::endl;
-    std::cout << text1.find(text2, 2) << std::endl;
+    auto text1 = String("11010", 15);
+    auto toReplace = String("1", 12);
+    auto withReplace = String("абобА", 1);
+    text1.replace(toReplace, withReplace);
+    std::cout << text1 << std::endl;
     return 0;
 }

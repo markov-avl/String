@@ -4,6 +4,7 @@
 #include <iostream>
 #include "multicharacter_block.h"
 
+constexpr long long NOT_FOUND = -1;
 
 class String {
 private:
@@ -14,6 +15,7 @@ private:
     MulticharacterBlock* tail{};  // ссылка на последний многосимвольный блок
 
     void deleteList();
+    void copyList(const String&);
     void setFromCString(const char*);
     void setSize(unsigned int);
 
@@ -31,7 +33,7 @@ public:
     [[nodiscard]] unsigned int length() const;
     String copy(unsigned int, unsigned int);
     long long find(const String&, unsigned int = 1);
-    explicit operator bool() const;
+    void replace(const String&, const String&);
 
     // конкатенация
     void concatenate(const String&);
@@ -46,6 +48,7 @@ public:
     friend void operator+=(String&, const String&);
     friend void operator+=(String&, const char*);
     friend void operator+=(String&, const std::string&);
+    explicit operator bool() const;
 };
 
 

@@ -10,6 +10,27 @@ void String::deleteList() {
         delete[] prev->characters;
         delete prev;
     }
+    blocks = 0;
+    lastLength = 0;
+}
+
+void String::copyList(const String& string) {
+    deleteList();
+    if (string) {
+        head = tail = new MulticharacterBlock(size);
+        auto current = string.head;
+        for (unsigned int i = 0; i < string.length(); ++i) {
+            if (i % size == 0 && i != 0) {
+                ++blocks;
+                lastLength = 0;
+                tail = tail->next = new MulticharacterBlock(size);
+            }
+            if (i % string.size == 0 && i != 0) {
+                current = current->next;
+            }
+            tail->characters[lastLength++] = current->characters[i % string.size];
+        }
+    }
 }
 
 void String::setFromCString(const char* text) {
@@ -55,8 +76,6 @@ String::String(const std::string &text, unsigned int size) {
 
 String::String(const String& string) {
     size = string.size;
-    blocks = 0;
-    lastLength = 0;
     deleteList();
     concatenate(string);
 }
@@ -126,11 +145,22 @@ long long String::find(const String &substring, unsigned int times) {
             }
         }
     }
-    return -1;
+    return NOT_FOUND;
 }
 
-String::operator bool() const {
-    return head != nullptr;
+void String::replace(const String &toReplace, const String &withReplace) {
+    auto string = String();
+    unsigned int n = 0;
+    unsigned int k = 1;
+    long long position = find(toReplace, k++);
+    while (position != NOT_FOUND) {
+        string += copy(n, position - n);
+        string += withReplace;
+        n = position + toReplace.length();
+        position = find(toReplace, k++);
+    }
+    string += copy(n, length());
+    copyList(string);
 }
 
 
@@ -204,4 +234,8 @@ void operator+=(String &a, const char *b) {
 
 void operator+=(String &a, const std::string &b) {
     a.concatenate(b);
+}
+
+String::operator bool() const {
+    return head != nullptr;
 }

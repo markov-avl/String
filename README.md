@@ -22,12 +22,12 @@
 1. **unsigned int** length() const - получение длины строки (каждый символ считается единицей измерения длины);
 2. **void** concatenate(const String& | const char* | const std::string&) - сцепление строк;
 3. **String** copy(unsigned int n, unsigned int k) - копирование k символов, начиная с n символа включительно;
-4. **long long int** find(const String&) - поиск начала подстроки в строке;
-5. **void** replace(const String& toReplace, const String& withReplace) - замена всех подстрок toReplace на withReplace;
-6. operator bool() const - возвращает истину, если строка не пуста, иначе - ложь.
+4. **long long** find(const String&, unsigned int times) - поиск начала подстроки в строке, найденного times раз;
+5. **void** replace(const String& toReplace, const String& withReplace) - замена всех подстрок toReplace на withReplace.
 
 ## Перегруженные операторы
 1. **void** operator=(const String& | const char* | const std::string&) - присваивание;
 2. **String** operator+(const String& a, const String& | const char* | const std::string& b) - сцепление a и b строк;
 3. **void** operator+=(const String& a, const String& | const char* | const std::string& b) - сцепление a и b строк в a;
-4. **std::ostream** &operator<<(std::ostream&, const String&) - вывод строки.
+4. **std::ostream** &operator<<(std::ostream&, const String&) - вывод строки;
+5. operator bool() const - возвращает истину, если строка не пуста, иначе - ложь.
