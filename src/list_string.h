@@ -24,8 +24,8 @@ public:
     explicit String(unsigned int = DEFAULT_SIZE);
     explicit String(const char*, unsigned int = DEFAULT_SIZE);
     explicit String(const std::string&, unsigned int = DEFAULT_SIZE);
-    ~String();
     String(const String&);
+    ~String();
 
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
