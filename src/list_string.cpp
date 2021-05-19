@@ -1,30 +1,6 @@
 #include "list_string.h"
 
 
-String toString(const char* text, unsigned int size) {
-    auto string = String(size);
-    if (text) {
-        string.blocks = 1;
-        string.last_length = 0;
-        auto current = string.tail = string.head = new MulticharacterBlock(size);
-        for (unsigned int i = 0; text[i]; ++i) {
-            if (i % size == 0 and i != 0) {
-                string.tail = current = current->next = new MulticharacterBlock(size);
-                ++string.blocks;
-                string.last_length = 0;
-            }
-            current->characters[i % size] = text[i];
-            ++string.last_length;
-        }
-    }
-    return string;
-}
-
-String toString(const std::string& text, unsigned int size) {
-    return toString(text.c_str(), size);
-}
-
-
 void String::deleteList() {
     MulticharacterBlock* prev;
     auto current = head;
@@ -36,21 +12,52 @@ void String::deleteList() {
     }
 }
 
+void String::setFromCString(const char* text) {
+    lastLength = 0;
+    if (text) {
+        blocks = 1;
+        auto current = tail = head = new MulticharacterBlock(this->size);
+        for (unsigned int i = 0; text[i]; ++i) {
+            if (i % this->size == 0 and i != 0) {
+                tail = current = current->next = new MulticharacterBlock(this->size);
+                ++blocks;
+                lastLength = 0;
+            }
+            current->characters[lastLength++] = text[i];
+        }
+    } else {
+        blocks = 0;
+        tail = head = nullptr;
+    }
+}
+
+void String::setSize(unsigned int value) {
+    size = value ? value : DEFAULT_SIZE;
+}
+
 
 String::String(unsigned int size) {
-    this->size = size;
+    setSize(size);
     blocks = 0;
-    last_length = 0;
+    lastLength = 0;
     tail = head = nullptr;
+}
+
+String::String(const char *text, unsigned int size) {
+    setSize(size);
+    setFromCString(text);
+}
+
+String::String(const std::string &text, unsigned int size) {
+    setSize(size);
+    setFromCString(text.c_str());
 }
 
 String::String(const String& string) {
     size = string.size;
     blocks = 0;
-    last_length = 0;
-    if (head != nullptr) {
-        deleteList();
-    }
+    lastLength = 0;
+    deleteList();
     concatenate(string);
 }
 
@@ -60,37 +67,36 @@ String::~String() {
 
 
 unsigned int String::length() const {
-    return (blocks != 0 ? (blocks - 1) * size + last_length : 0);  // TODO: починить
+    return (blocks != 0 ? (blocks - 1) * size + lastLength : 0);
 }
 
 
 void String::concatenate(const String& text) {
     if (head == nullptr and text.head != nullptr) {
+        ++blocks;
         head = tail = new MulticharacterBlock(size);
     }
     auto aCurrent = tail;
     auto bCurrent = text.head;
     for (unsigned int i = 0; i < text.length(); ++i) {
-        if (last_length == size) {
-            tail = aCurrent = aCurrent->next = new MulticharacterBlock(size);
+        if (lastLength == size) {
             ++blocks;
-            last_length = 0;
+            lastLength = 0;
+            tail = aCurrent = aCurrent->next = new MulticharacterBlock(size);
         }
         if (i % text.size == 0 and i != 0) {
             bCurrent = bCurrent->next;
         }
-        aCurrent->characters[last_length++] = bCurrent->characters[i % text.size];
+        aCurrent->characters[lastLength++] = bCurrent->characters[i % text.size];
     }
 }
 
 void String::concatenate(const char* text) {
-    auto string = toString(text);
-    concatenate(string);
+    concatenate(String(text));
 }
 
 void String::concatenate(const std::string& text) {
-    auto string = toString(text);
-    concatenate(string);
+    concatenate(String(text));
 }
 
 
@@ -98,7 +104,7 @@ std::ostream &operator<<(std::ostream &out, const String &string) {
     auto current = string.head;
     unsigned char characters;
     while (current != nullptr) {
-        characters = current != string.tail ? string.size : string.last_length;
+        characters = current != string.tail ? string.size : string.lastLength;
         for (unsigned int i = 0; i < characters; ++i) {
             out << current->characters[i];
         }
