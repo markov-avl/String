@@ -19,11 +19,12 @@
 5. ~String() - деструктор.
 
 ## Реализованные функции
-1. **unsigned int** length() - получение длины строки (каждый символ считается единицей измерения длины);
+1. **unsigned int** length() const - получение длины строки (каждый символ считается единицей измерения длины);
 2. **void** concatenate(const String& | const char* | const std::string&) - сцепление строк;
 3. **String** copy(unsigned int n, unsigned int k) - копирование k символов, начиная с n символа включительно;
 4. **long long int** find(const String&) - поиск начала подстроки в строке;
 5. **void** replace(const String& toReplace, const String& withReplace) - замена всех подстрок toReplace на withReplace;
+6. operator bool() const - возвращает истину, если строка не пуста, иначе - ложь.
 
 ## Перегруженные операторы
 1. **void** operator=(const String& | const char* | const std::string&) - присваивание;

@@ -14,7 +14,7 @@ void String::deleteList() {
 
 void String::setFromCString(const char* text) {
     lastLength = 0;
-    if (text) {
+    if (*text) {
         blocks = 1;
         auto current = tail = head = new MulticharacterBlock(this->size);
         for (unsigned int i = 0; text[i]; ++i) {
@@ -94,6 +94,43 @@ String String::copy(unsigned int n, unsigned int k) {
         }
     }
     return copyString;
+}
+
+long long String::find(const String &substring, unsigned int times) {
+    if (!times) {
+        times = 1;
+    }
+    if (substring) {
+        unsigned int i, k, foundTimes = 0;
+        MulticharacterBlock* current;
+        auto sourceCurrent = head;
+        auto substrCurrent = substring.head;
+        for (unsigned int n = 0; n < length() - substring.length() + 1; ++n) {
+            if (n % size == 0 && n != 0) {
+                sourceCurrent = sourceCurrent->next;
+            }
+            current = sourceCurrent;
+            for (i = n, k = 0; k < substring.length(); ++i, ++k) {
+                if (i % size == 0 && i != n) {
+                    current = current->next;
+                }
+                if (k % substring.size == 0 && k != 0) {
+                    substrCurrent = substrCurrent->next;
+                }
+                if (current->characters[i % size] != substrCurrent->characters[k % substring.size]) {
+                    break;
+                }
+            }
+            if (k == substring.length() && ++foundTimes == times) {
+                return n;
+            }
+        }
+    }
+    return -1;
+}
+
+String::operator bool() const {
+    return head != nullptr;
 }
 
 

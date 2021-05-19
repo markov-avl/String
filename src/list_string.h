@@ -30,6 +30,8 @@ public:
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
     String copy(unsigned int, unsigned int);
+    long long find(const String&, unsigned int = 1);
+    explicit operator bool() const;
 
     // конкатенация
     void concatenate(const String&);

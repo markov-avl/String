@@ -3,9 +3,9 @@
 
 
 int main() {
-    auto text1 = String("1234567890", 4);
-    auto text2 = text1.copy(4, 9);
-    std::cout << "<" << text2 << ">" << std::endl;
-    std::cout << text2.length() << std::endl;
+    auto text1 = String("101010", 15);
+    auto text2 = String("0", 12);
+    // std::cout << "<" << text1 << ">" << std::endl;
+    std::cout << text1.find(text2, 2) << std::endl;
     return 0;
 }
