@@ -3,11 +3,9 @@
 
 
 int main() {
-    std::string text0 = "efesfsef:";
-    auto text1 = String(4);
-    auto text2 = String("rhfsieuhfseiuhfsehf");
-    text1 += text1 + text2;
-    std::cout << "<" << text1 << ">" << std::endl;
-    std::cout << text1.length() << std::endl;
+    auto text1 = String("1234567890", 4);
+    auto text2 = text1.copy(4, 9);
+    std::cout << "<" << text2 << ">" << std::endl;
+    std::cout << text2.length() << std::endl;
     return 0;
 }

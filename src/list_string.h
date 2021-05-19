@@ -29,6 +29,7 @@ public:
 
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
+    String copy(unsigned int, unsigned int);
 
     // конкатенация
     void concatenate(const String&);

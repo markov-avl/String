@@ -70,6 +70,32 @@ unsigned int String::length() const {
     return (blocks != 0 ? (blocks - 1) * size + lastLength : 0);
 }
 
+String String::copy(unsigned int n, unsigned int k) {
+    auto copyString = String(size);
+    if (k > 0 && length() > n) {
+        auto sourceCurrent = head;
+        unsigned int block = 0;
+        while (n >= (block + 1) * size) {  // находим блок, с которого нужно проводить копирование
+            sourceCurrent = sourceCurrent->next;
+            ++block;
+        }
+        auto copyCurrent = copyString.head = copyString.tail = new MulticharacterBlock(copyString.size);
+        ++copyString.blocks;
+        for (unsigned int i = n - block * size, j = 0; block * size + i < length() && j < k; ++i, ++j) {
+            if (i % size == 0 && i != 0) {
+                sourceCurrent = sourceCurrent->next;
+            }
+            if (j % copyString.size == 0 && j != 0) {
+                copyCurrent = copyCurrent->next = copyString.tail = new MulticharacterBlock(copyString.size);
+                ++copyString.blocks;
+                copyString.lastLength = 0;
+            }
+            copyCurrent->characters[copyString.lastLength++] = sourceCurrent->characters[i % size];
+        }
+    }
+    return copyString;
+}
+
 
 void String::concatenate(const String& text) {
     if (head == nullptr and text.head != nullptr) {
