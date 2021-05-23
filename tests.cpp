@@ -27,11 +27,14 @@ TEST(Length, StringLength) {
         EXPECT_EQ(string.length(), 0);
 
         for (unsigned int j = 1; j < 50; ++j) {
-            stdstring = "Hello world!";
-            string = "Hello world!";
+            string = stdstring = "Hello world!";
             string = string.copy(i, j);
-            stdstring = stdstring.substr(i, j);
-            std::cout << stdstring << std::endl;
+            try {
+                stdstring = stdstring.substr(i, j);
+                EXPECT_EQ(string, stdstring); // нельзя так сравнивать
+            } catch (int) {
+                EXPECT_EQ(string, "");   // нельзя так сравнивать
+            }
         }
     }
 }
