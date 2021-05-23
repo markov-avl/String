@@ -7,7 +7,6 @@ void String::deleteList() {
     while (current != nullptr) {
         prev = current;
         current = current->next;
-        delete[] prev->characters;
         delete prev;
     }
     blocks = 0;
@@ -17,6 +16,7 @@ void String::deleteList() {
 void String::copyList(const String& string) {
     deleteList();
     if (string) {
+        ++blocks;
         head = tail = new MulticharacterBlock(size);
         auto current = string.head;
         for (unsigned int i = 0; i < string.length(); ++i) {
@@ -87,6 +87,7 @@ String::~String() {
 
 unsigned int String::length() const {
     return (blocks != 0 ? (blocks - 1) * size + lastLength : 0);
+
 }
 
 String String::copy(unsigned int n, unsigned int k) {
@@ -234,6 +235,25 @@ void operator+=(String &a, const char *b) {
 
 void operator+=(String &a, const std::string &b) {
     a.concatenate(b);
+}
+
+String &String::operator=(const String& string) {
+    if (this != &string) {
+        copyList(string);
+    }
+    return *this;
+}
+
+String &String::operator=(const char *string) {
+    deleteList();
+    setFromCString(string);
+    return *this;
+}
+
+String &String::operator=(const std::string &string) {
+    deleteList();
+    setFromCString(string.c_str());
+    return *this;
 }
 
 String::operator bool() const {

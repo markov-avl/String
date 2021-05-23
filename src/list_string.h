@@ -23,9 +23,9 @@ public:
     static const unsigned int DEFAULT_SIZE = 16;
 
     // конструкторы, оператор копирования и деструктор
-    explicit String(unsigned int = DEFAULT_SIZE);
-    explicit String(const char*, unsigned int = DEFAULT_SIZE);
-    explicit String(const std::string&, unsigned int = DEFAULT_SIZE);
+    String(unsigned int = DEFAULT_SIZE);
+    String(const char*, unsigned int = DEFAULT_SIZE);
+    String(const std::string&, unsigned int = DEFAULT_SIZE);
     String(const String&);
     ~String();
 
@@ -48,6 +48,9 @@ public:
     friend void operator+=(String&, const String&);
     friend void operator+=(String&, const char*);
     friend void operator+=(String&, const std::string&);
+    String& operator=(const String&);
+    String& operator=(const char*);
+    String& operator=(const std::string&);
     explicit operator bool() const;
 };
 

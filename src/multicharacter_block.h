@@ -7,6 +7,7 @@ struct MulticharacterBlock {
     char* characters;
 
     explicit MulticharacterBlock(unsigned int);
+    ~MulticharacterBlock();
 };
 
 
