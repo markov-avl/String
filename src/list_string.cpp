@@ -11,6 +11,7 @@ void String::deleteList() {
     }
     blocks = 0;
     lastLength = 0;
+    head = tail = nullptr;
 }
 
 void String::copyList(const String& string) {
@@ -20,12 +21,12 @@ void String::copyList(const String& string) {
         head = tail = new MulticharacterBlock(size);
         auto current = string.head;
         for (unsigned int i = 0; i < string.length(); ++i) {
-            if (i % size == 0 && i != 0) {
+            if (i % size == 0 && i) {
                 ++blocks;
                 lastLength = 0;
                 tail = tail->next = new MulticharacterBlock(size);
             }
-            if (i % string.size == 0 && i != 0) {
+            if (i % string.size == 0 && i) {
                 current = current->next;
             }
             tail->characters[lastLength++] = current->characters[i % string.size];
@@ -39,7 +40,7 @@ void String::setFromCString(const char* text) {
         blocks = 1;
         auto current = tail = head = new MulticharacterBlock(this->size);
         for (unsigned int i = 0; text[i]; ++i) {
-            if (i % this->size == 0 and i != 0) {
+            if (i % this->size == 0 and i) {
                 tail = current = current->next = new MulticharacterBlock(this->size);
                 ++blocks;
                 lastLength = 0;
@@ -91,7 +92,7 @@ unsigned int String::length() const {
 }
 
 String String::copy(unsigned int n, unsigned int k) {
-    auto copyString = String(size);
+    String copyString(size);
     if (k > 0 && length() > n) {
         auto sourceCurrent = head;
         unsigned int block = 0;
@@ -102,7 +103,7 @@ String String::copy(unsigned int n, unsigned int k) {
         auto copyCurrent = copyString.head = copyString.tail = new MulticharacterBlock(copyString.size);
         ++copyString.blocks;
         for (unsigned int i = n - block * size, j = 0; block * size + i < length() && j < k; ++i, ++j) {
-            if (i % size == 0 && i != 0) {
+            if (i % size == 0 && i) {
                 sourceCurrent = sourceCurrent->next;
             }
             if (j % copyString.size == 0 && j != 0) {
@@ -116,10 +117,8 @@ String String::copy(unsigned int n, unsigned int k) {
     return copyString;
 }
 
-long long String::find(const String &substring, unsigned int times) {
-    if (!times) {
-        times = 1;
-    }
+
+long long String::find(const String &substring) const {
     if (substring) {
         unsigned int i, k, foundTimes = 0;
         MulticharacterBlock* current;
@@ -141,7 +140,7 @@ long long String::find(const String &substring, unsigned int times) {
                     break;
                 }
             }
-            if (k == substring.length() && ++foundTimes == times) {
+            if (k == substring.length()) {
                 return n;
             }
         }
@@ -149,19 +148,12 @@ long long String::find(const String &substring, unsigned int times) {
     return NOT_FOUND;
 }
 
-void String::replace(const String &toReplace, const String &withReplace) {
-    auto string = String();
-    unsigned int n = 0;
-    unsigned int k = 1;
-    long long position = find(toReplace, k++);
-    while (position != NOT_FOUND) {
-        string += copy(n, position - n);
-        string += withReplace;
-        n = position + toReplace.length();
-        position = find(toReplace, k++);
-    }
-    string += copy(n, length());
-    copyList(string);
+long long String::find(const char *substring) const {
+    return find(String(substring));
+}
+
+long long String::find(const std::string &substring) const {
+    return find(String(substring));
 }
 
 
@@ -178,7 +170,7 @@ void String::concatenate(const String& text) {
             lastLength = 0;
             tail = aCurrent = aCurrent->next = new MulticharacterBlock(size);
         }
-        if (i % text.size == 0 and i != 0) {
+        if (i % text.size == 0 and i) {
             bCurrent = bCurrent->next;
         }
         aCurrent->characters[lastLength++] = bCurrent->characters[i % text.size];
@@ -191,6 +183,19 @@ void String::concatenate(const char* text) {
 
 void String::concatenate(const std::string& text) {
     concatenate(String(text));
+}
+
+
+char *String::toCString() const {
+    char* cString = new char[length() + 1] {};
+    auto current = head;
+    for (unsigned int i = 0; i < length(); ++i) {
+        if (i % size == 0 and i) {
+            current = current->next;
+        }
+        cString[i] = current->characters[i % size];
+    }
+    return cString;
 }
 
 
@@ -208,19 +213,31 @@ std::ostream &operator<<(std::ostream &out, const String &string) {
 }
 
 String operator+(const String &a, const String &b) {
-    auto string = String(a);
+    String string(a);
     string.concatenate(b);
     return string;
 }
 
 String operator+(const String &a, const char *b) {
-    auto string = String(a);
+    String string(a);
     string.concatenate(b);
     return string;
 }
 
 String operator+(const String &a, const std::string &b) {
-    auto string = String(a);
+    String string(a);
+    string.concatenate(b);
+    return string;
+}
+
+String operator+(const char *a, const String &b) {
+    String string(a);
+    string.concatenate(b);
+    return string;
+}
+
+String operator+(const std::string &a, const String &b) {
+    String string(a);
     string.concatenate(b);
     return string;
 }
@@ -258,4 +275,26 @@ String &String::operator=(const std::string &string) {
 
 String::operator bool() const {
     return head != nullptr;
+}
+
+
+// TODO: доделать
+String replace(const String &string, const String &toReplace, const String &withReplace) {
+    String replacedString;
+    String helperString(string);
+    long long position = helperString.find(toReplace);
+    if (position == NOT_FOUND) {
+        replacedString = string;
+    }
+    while (position != NOT_FOUND) {
+
+        replacedString = helperString.copy(0, position) + withReplace +helperString.copy(position + toReplace.length(), helperString.length());
+        helperString = helperString.copy(position + toReplace.length(), helperString.length());
+        position = helperString.find(toReplace);
+
+        }
+    if (position == NOT_FOUND) {
+            replacedString += helperString.copy(position + toReplace.length(), helperString.length());
+    }
+    return replacedString;
 }

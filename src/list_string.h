@@ -32,20 +32,28 @@ public:
     // стандартные методы
     [[nodiscard]] unsigned int length() const;
     String copy(unsigned int, unsigned int);
-    long long find(const String&, unsigned int = 1);
-    void replace(const String&, const String&);
+
+    // поиск
+    long long find(const String&) const;
+    long long find(const char*) const;
+    long long find(const std::string&) const;
 
     // конкатенация
     void concatenate(const String&);
     void concatenate(const char*);
     void concatenate(const std::string&);
 
+    // преобразование
+    [[nodiscard]] char* toCString() const;
+
     // перегрузка стандартных операторов
     friend std::ostream &operator<<(std::ostream&, const String&);
     friend String operator+(const String&, const String&);
     friend String operator+(const String&, const char*);
     friend String operator+(const String&, const std::string&);
-    friend void operator+=(String&, const String&);
+    friend String operator+(const char*, const String&);
+    friend String operator+(const std::string&, const String&);
+    friend void operator+=(String&, const String&);  // TODO: подумать, не унарная ли она
     friend void operator+=(String&, const char*);
     friend void operator+=(String&, const std::string&);
     String& operator=(const String&);
@@ -53,6 +61,9 @@ public:
     String& operator=(const std::string&);
     explicit operator bool() const;
 };
+
+
+String replace(const String&, const String&, const String&);
 
 
 #endif
