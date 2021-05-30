@@ -3,6 +3,9 @@
 ## Вариант
 **Односвязный список** из многосимвольных блоков с **фиксированной длиной**.
 
+## Константы:
+1. `long long NOT_FOUND = -1` - значение, если не найдена подстрока в строке.
+
 ## Поля класса
 1. `unsigned int size` - количество символов в блоке;
 2. `unsigned int blocks` - количество многосимвольных блоков;
@@ -20,8 +23,8 @@
 
 ## Cтандартные методы
 1. `unsigned int length() const` - получение длины строки (каждый символ считается единицей измерения длины);
-2. `String copy(unsigned int n, unsigned int k)` - копирование k символов, начиная с n символа включительно;
-3. Методы поиска - поиск начала подстроки в строке (первое вхождение слева):
+2. `String copy(unsigned int n, unsigned int k)` - копирование `k` символов, начиная с `n` символа включительно;
+3. Методы поиска - поиск начала подстроки в строке (первое вхождение слева) если такое есть, иначе - `NOT_FOUND`:
     - `long long find(const String&) const`;
     - `long long find(const char*) const`;
     - `long long find(const std::string&) const`;
@@ -47,7 +50,7 @@
     - `String& operator=(const char*)`;
     - `String& operator=(const std::string&)`.
 
-## Бонусные методы:
+## Бонусные методы
 1. `explicit operator bool() const` - возвращает истину, если строка не пуста, иначе - ложь.;
-2. `char* toCString() const` - преобразование строки в массив char;
-3. `String replace(const String &string, const String &toReplace, const String &withReplace)` - замена всех подстрок toReplace на withReplace в строке string;
+2. `char* toCString() const` - преобразование строки в массив `char`;
+3. `String replace(const String &string, const String &toReplace, const String &withReplace)` - замена всех подстрок `toReplace` на `withReplace` в строке `string`.
