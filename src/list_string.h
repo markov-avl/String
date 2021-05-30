@@ -53,7 +53,7 @@ public:
     friend String operator+(const String&, const std::string&);
     friend String operator+(const char*, const String&);
     friend String operator+(const std::string&, const String&);
-    friend void operator+=(String&, const String&);  // TODO: подумать, не унарная ли она
+    friend void operator+=(String&, const String&);
     friend void operator+=(String&, const char*);
     friend void operator+=(String&, const std::string&);
     String& operator=(const String&);

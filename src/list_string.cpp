@@ -120,7 +120,7 @@ String String::copy(unsigned int n, unsigned int k) {
 
 long long String::find(const String &substring) const {
     if (substring) {
-        unsigned int i, k, foundTimes = 0;
+        unsigned int i, k;
         MulticharacterBlock* current;
         auto sourceCurrent = head;
         auto substrCurrent = substring.head;
@@ -278,23 +278,15 @@ String::operator bool() const {
 }
 
 
-// TODO: доделать
 String replace(const String &string, const String &toReplace, const String &withReplace) {
     String replacedString;
     String helperString(string);
     long long position = helperString.find(toReplace);
-    if (position == NOT_FOUND) {
-        replacedString = string;
-    }
     while (position != NOT_FOUND) {
-
-        replacedString = helperString.copy(0, position) + withReplace +helperString.copy(position + toReplace.length(), helperString.length());
+        replacedString = replacedString + helperString.copy(0, position) + withReplace;
         helperString = helperString.copy(position + toReplace.length(), helperString.length());
         position = helperString.find(toReplace);
-
-        }
-    if (position == NOT_FOUND) {
-            replacedString += helperString.copy(position + toReplace.length(), helperString.length());
     }
+    replacedString += helperString;
     return replacedString;
 }

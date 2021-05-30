@@ -18,16 +18,36 @@
 4. `String(const String&)` - оператор копирования;
 5. `~String()` - деструктор.
 
-## Реализованные функции
+## Cтандартные методы
 1. `unsigned int length() const` - получение длины строки (каждый символ считается единицей измерения длины);
-2. `void concatenate(const String& | const char* | const std::string&)` - сцепление строк;
-3. `String copy(unsigned int n, unsigned int k)` - копирование k символов, начиная с n символа включительно;
-4. `long long find(const String&, unsigned int times)` - поиск начала подстроки в строке, найденного times раз;
-5. `void replace(const String& toReplace, const String& withReplace)` - замена всех подстрок toReplace на withReplace.
+2. `String copy(unsigned int n, unsigned int k)` - копирование k символов, начиная с n символа включительно;
+3. Методы поиска - поиск начала подстроки в строке (первое вхождение слева):
+    - `long long find(const String&) const`;
+    - `long long find(const char*) const`;
+    - `long long find(const std::string&) const`;
+4. Методы конкатенация - сцепление строк:
+    - `void concatenate(const String&)`;
+    - `void concatenate(const char*)`;
+    - `void concatenate(const std::string&)`.
 
-## Перегруженные операторы
-1. `void operator=(const String& | const char* | const std::string&)` - присваивание;
-2. `String operator+(const String& a, const String& | const char* | const std::string& b)` - сцепление a и b строк;
-3. `void operator+=(const String& a, const String& | const char* | const std::string& b)` - сцепление a и b строк в a;
-4. `std::ostream &operator<<(std::ostream&, const String&)` - вывод строки;
-5. `operator bool() const` - возвращает истину, если строка не пуста, иначе - ложь.
+## Перегрузка стандартных операторов
+1. `friend std::ostream &operator<<(std::ostream&, const String&)` - вывод строки;
+2. Оператор `+`:
+    - `friend String operator+(const String&, const String&)`;
+    - `friend String operator+(const String&, const char*)`;
+    - `friend String operator+(const String&, const std::string&)`;
+    - `friend String operator+(const char*, const String&)`;
+    - `friend String operator+(const std::string&, const String&)`;
+3. Оператор `+=`:
+    - `friend void operator+=(String&, const String&)`;
+    - `friend void operator+=(String&, const char*)`;
+    - `friend void operator+=(String&, const std::string&)`;
+4. Оператор присваивания:
+    - `String& operator=(const String&)`;
+    - `String& operator=(const char*)`;
+    - `String& operator=(const std::string&)`.
+
+## Бонусные методы:
+1. `explicit operator bool() const` - возвращает истину, если строка не пуста, иначе - ложь.;
+2. `char* toCString() const` - преобразование строки в массив char;
+3. `String replace(const String &string, const String &toReplace, const String &withReplace)` - замена всех подстрок toReplace на withReplace в строке string;

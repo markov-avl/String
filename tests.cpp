@@ -4,7 +4,7 @@
 #include "list_string.h"
 
 
-// bugs found after testing: 2
+// bugs found after testing: 3
 
 
 TEST(Length, StringLength) {
