@@ -4,14 +4,13 @@
 #include "list_string.h"
 
 
-// bugs found after testing: 3
+// bugs found after testing: 5
 
 
 TEST(Length, StringLength) {
     char* cstring;
     std::string stdstring;
     String replacedString;
-
     for (unsigned int i = 0; i < 50; ++i) {
         String string("Hello world!", i);
         EXPECT_EQ(string.length(), 12);
@@ -44,33 +43,110 @@ TEST(Length, StringLength) {
 
         replacedString = replace(string, String("No"), String("Yes"));
         EXPECT_EQ(replacedString.length(), 12);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(string, String("o"), String("a"));
         EXPECT_EQ(replacedString.length(), 12);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(replacedString, String("a"), String("aa"));
         EXPECT_EQ(replacedString.length(), 14);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(replacedString, String("aa"), String("o"));
         EXPECT_EQ(replacedString.length(), 12);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(string, String("l"), String("1234"));
         EXPECT_EQ(replacedString.length(), 21);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(replacedString, String("3"), String("000"));
         EXPECT_EQ(replacedString.length(), 27);
-        std::cout << replacedString << std::endl;
 
         replacedString = replace(replacedString, String("00"), String("1"));
         EXPECT_EQ(replacedString.length(), 24);
-        std::cout << replacedString << std::endl;
     }
 }
+
+TEST(Replace, StringReplace) {
+    auto text = String("abraka dabra");
+    String text1, text2;
+
+    text1 = replace(text, String(" "), String("_"));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "abraka_dabra");
+
+    text2 = replace(text1, String("a"), String("aa"));
+    testing::internal::CaptureStdout();
+    std::cout << text2;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "aabraakaa_daabraa");
+
+    text1 = replace(text2, String("a"), String("o"));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "oobrookoo_doobroo");
+
+    text2 = replace(text1, String("o"), String("aaaaa"));
+    testing::internal::CaptureStdout();
+    std::cout << text2;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(),
+              "aaaaaaaaaabraaaaaaaaaakaaaaaaaaaa_daaaaaaaaaabraaaaaaaaaa");
+
+    text2 = replace(text1, String("oo"), String("aaaaa"));
+    testing::internal::CaptureStdout();
+    std::cout << text2;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "aaaaabraaaaakaaaaa_daaaaabraaaaa");
+
+    String text3("abraka dabra abraka dabra abraka dabra ", 8);
+
+    text1 = replace(text3, String("ra ab", 8), String("aa"));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "abraka dabaaraka dabaaraka dabra ");
+
+    text1 = replace(text1, String("ab", 3), String("ssss", 2));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "ssssraka dssssaaraka dssssaaraka dssssra ");
+
+    text1 = String("");
+    text1 = replace(text1, String("", 3), String("", 2));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "");
+
+    text1 = String("hello");
+    text1 = replace(text1, String("hello", 1), String("hello", 2));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "hello");
+
+    text1 = String("aaaabbaaaabbaaaabbaaaabbaaaabbaaaabbaaaabbaaaabbaaaabbaaaabbaaaabb");
+    text1 = replace(text1, String("aaaa", 9), String("b", 1));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
+    text1 = replace(text1, String("b", 9), String("aaaa_aaaa", 1));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "aaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaa"
+                                                      "aaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaa"
+                                                      "aaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaa"
+                                                      "aaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaa"
+                                                      "aaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaaaaaa_aaaa"
+                                                      "aaaa_aaaaaaaa_aaaaaaaa_aaaa");
+
+    text1 = String("abraka dabra abraka dabra abraka dabra ", 7);
+    text1 = replace(text1, String("ra ab", 2), String("aa", 1));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "abraka dabaaraka dabaaraka dabra ");
+
+    text1 = String("abraka dabraabraka dabraabraka dabra ", 7);
+    text1 = replace(text1, String("raab", 2), String("aa", 1));
+    testing::internal::CaptureStdout();
+    std::cout << text1;
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "abraka dabaaraka dabaaraka dabra ");
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

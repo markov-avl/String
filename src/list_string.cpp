@@ -124,16 +124,17 @@ long long String::find(const String &substring) const {
         MulticharacterBlock* current;
         auto sourceCurrent = head;
         auto substrCurrent = substring.head;
-        for (unsigned int n = 0; n < length() - substring.length() + 1; ++n) {
-            if (n % size == 0 && n != 0) {
+        for (unsigned int n = 0; n <= (long long)length() - substring.length(); ++n) {
+            if (n % size == 0 && n) {
                 sourceCurrent = sourceCurrent->next;
             }
             current = sourceCurrent;
+            substrCurrent = substring.head;
             for (i = n, k = 0; k < substring.length(); ++i, ++k) {
                 if (i % size == 0 && i != n) {
                     current = current->next;
                 }
-                if (k % substring.size == 0 && k != 0) {
+                if (k % substring.size == 0 && k) {
                     substrCurrent = substrCurrent->next;
                 }
                 if (current->characters[i % size] != substrCurrent->characters[k % substring.size]) {

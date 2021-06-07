@@ -23,9 +23,9 @@ public:
     static const unsigned int DEFAULT_SIZE = 16;
 
     // конструкторы, оператор копирования и деструктор
-    String(unsigned int = DEFAULT_SIZE);
-    String(const char*, unsigned int = DEFAULT_SIZE);
-    String(const std::string&, unsigned int = DEFAULT_SIZE);
+    explicit String(unsigned int = DEFAULT_SIZE);
+    explicit String(const char*, unsigned int = DEFAULT_SIZE);
+    explicit String(const std::string&, unsigned int = DEFAULT_SIZE);
     String(const String&);
     ~String();
 
@@ -34,9 +34,9 @@ public:
     String copy(unsigned int, unsigned int);
 
     // поиск
-    long long find(const String&) const;
+    [[nodiscard]] long long find(const String&) const;
     long long find(const char*) const;
-    long long find(const std::string&) const;
+    [[nodiscard]] long long find(const std::string&) const;
 
     // конкатенация
     void concatenate(const String&);
