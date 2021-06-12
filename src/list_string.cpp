@@ -40,7 +40,7 @@ void String::setFromCString(const char* text) {
         blocks = 1;
         auto current = tail = head = new MulticharacterBlock(this->size);
         for (unsigned int i = 0; text[i]; ++i) {
-            if (i % this->size == 0 and i) {
+            if (i % this->size == 0 && i) {
                 tail = current = current->next = new MulticharacterBlock(this->size);
                 ++blocks;
                 lastLength = 0;
